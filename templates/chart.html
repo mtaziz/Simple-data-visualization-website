@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block head %}
+    <script src="{%  static 'js/exporting.js' %}"></script>
+    <script src="{%  static 'js/highcharts.js' %}"></script>
+    <script src="{%  static 'js/highcharts-more.js' %}"></script>
+{% endblock head  %}
+
+
+{% block content %}
+    <div class="ui container segment">
+            <div class="ui simple dropdown item">
+                Area
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item" id="NS">南山区</div>
+                    <div class="item" id="FT">福田区</div>
+                    <div class="item" id="BA">宝安区</div>
+                    <div class="item"  id="All">All</div>
+                </div>
+            </div>
+          <div class="ui container" id="line">
+          </div>
+       </div>
+    <div class="ui equal width grid" style="width:100%;margin:5px 5px 5px 5px;">
+         <div class="row">
+             <div class="column">
+                    <div class="ui container segment">
+                       <div class="ui container" id="bar"></div>
+                    </div>
+             </div>
+         </div>
+         <div class="row">
+                 <div class="column">
+                     <div class="ui container segment">
+                        <div class="ui container" id="pie1"></div>
+                     </div>
+                 </div>
+                 <div class="column">
+                     <div class="ui container segment">
+                        <div class="ui container" id="pie2"></div>
+                     </div>
+                 </div>
+         </div>
+    </div>
+{% endblock content %}
+
+
+{% block chart_script %}
+
+ <script>
+    $(function () {
+       $('#bar').highcharts({
+                credits: {
+                     enabled: false
+                },
+                xAxis: {
+                    tickWidth: 0,
+                    enabled:false,
+                    labels: {
+                        enabled: false
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: '职位个数'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: 'count'
+                },
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Lagou深圳市python招聘地区分布'
+                },
+                series: {{ chart_bar|safe }}
+            });
+
+       $('#pie1').highcharts({
+            chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+					},
+					title: {
+						text: 'python招聘发布职位薪资情况(一个月)'
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							// 显示图例
+							showInLegend: true
+						}
+					},
+                    /*
+					legend: {	// 图例显示位置
+						layout: 'vertical',
+						align: 'left',
+						verticalAlign: 'top',
+						x: 20,
+						y: 20,
+						floating: true,
+						backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || 'transparent'
+					},
+					*/
+					credits: {	// 右下角水印
+						enabled: true,
+						text: 'pollord'
+					},
+					series: [{
+						name: 'Percent',
+						colorByPoint: true,
+						data: {{ chart_pie1|safe }}
+					}]
+				});
+
+       $('#pie2').highcharts({
+            chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+					},
+
+					title: {
+						text: 'python招聘发布职位工作年限要求(一个月)'
+
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							// 显示图例
+							showInLegend: true
+						}
+					},
+                    /*
+					legend: {	// 图例显示位置
+						layout: 'vertical',
+						align: 'left',
+						verticalAlign: 'top',
+						x: 20,
+						y: 20,
+						floating: true,
+						backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || 'transparent'
+					},
+					*/
+					credits: {	// 右下角水印
+						enabled: true,
+						text: 'pollord'
+					},
+					series: [{
+						name: 'Percent',
+						colorByPoint: true,
+						data: {{ chart_pie2|safe }}
+					}]
+				});
+
+       /* Default display without JS loading */
+       $('#line').highcharts({
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: "深圳各区python招聘曲线"
+                },
+                xAxis: {
+             /* safe:Prevent character escape */
+                    categories: {{ xAxis|safe }}
+
+                },
+                yAxis: {
+                    title: {
+                        text: '职位个数'
+                    }
+                },
+                series: {{ chart_ALL|safe }}
+
+            });
+
+       $('#NS').click(function () {
+            $('#line').highcharts({
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: "南山区python招聘曲线"
+                },
+                xAxis: {
+                    categories: {{ xAxis|safe }}
+
+                },
+                yAxis: {
+                    title: {
+                        text: '职位个数'
+                    }
+                },
+                series: {{ chart_NS|safe }}
+
+           });
+        });
+
+       $('#FT').click(function () {
+            $('#line').highcharts({
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: "福田区python招聘曲线"
+                },
+                xAxis: {
+                    categories: {{ xAxis|safe }},
+                },
+                yAxis: {
+                    title: {
+                        text: '职位个数'
+                    }
+                },
+                series: {{ chart_FT|safe }}
+
+            });
+        });
+
+       $('#BA').click(function () {
+            $('#line').highcharts({
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: "宝安区python招聘曲线"
+                },
+                xAxis: {
+                    categories: {{ xAxis|safe }}
+
+                },
+                yAxis: {
+                    title: {
+                        text: '职位个数'
+                    }
+                },
+                series: {{ chart_BA|safe }}
+
+            });
+        });
+
+       $('#All').click(function () {
+           $('#line').highcharts({
+               credits: {
+                   enabled: false
+               },
+               title: {
+                   text: "深圳各区python招聘曲线"
+               },
+               xAxis: {
+                   categories: {{ xAxis|safe }}
+
+               },
+               yAxis: {
+                   title: {
+                       text: '职位个数'
+                   }
+               },
+               series: {{ chart_ALL|safe }}
+
+           });
+       });
+    })
+    </script>
+
+ {% endblock chart_script %}

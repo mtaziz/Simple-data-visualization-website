@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Visualization</title>
+    <link rel="stylesheet" href="{%  static 'css/semantic.css' %}">
+    <script src="{%  static 'js/jquery.min.js' %}"></script>
+    <script src="{%  static 'js/semantic.js' %}"></script>
+    {% block head %}{% endblock head  %}
+
+</head>
+<body>
+  <div class="ui visible thin left sidebar inverted vertical menu">
+    <div class="header item">
+      <img src="{% static 'images/logo2.png' %}">
+    </div>
+    <a class="item" href="/">Data
+      <i class="database icon"></i>
+    </a>
+    <a class="item" href="/chart/">Charts
+      <i class="bar chart icon"></i>
+    </a>
+    <a class="item" href="#">Others
+      <i class="idea icon"></i>
+    </a>
+  </div>
+
+
+  <div class="pusher">
+     <div class="ui menu">
+        <div class="header item" id="menu">Menu&nbsp;
+          <i class="content icon"></i>
+        </div>
+        <a class="item" href="/">Data&nbsp;
+            <i class="database icon"></i>
+        </a>
+        <a class="item" href="/chart/">Charts&nbsp;
+            <i class="bar chart icon"></i>
+        </a>
+        <a class="item" href="#">Others&nbsp;
+            <i class="idea icon"></i>
+        </a>
+      </div>
+
+    {% block statistic %}{% endblock statistic %}
+
+     <div class="ui divider"></div>
+     <div class="ui equal width grid" style="width:60%;margin:5px 5px 5px 5px;">
+            <div class="row">
+                <div class="column">
+                    {% block content %}{% endblock content %}
+                 </div>
+            </div>
+     </div>
+  </div>
+
+  <script>
+    $('#menu').click(function () {
+      $('.ui.sidebar').sidebar('toggle');
+    });
+  </script>
+
+  {% block chart_script %} {% endblock chart_script %}
+
+</body>
+</html>
